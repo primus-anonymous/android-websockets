@@ -13,11 +13,14 @@ Ported from JavaScript to Java by [Eric Butler](https://twitter.com/codebutler) 
 Here's the entire API:
 
 ```java
-List<BasicNameValuePair> extraHeaders = Arrays.asList(
-    new BasicNameValuePair("Cookie", "session=abcd");
-);
 
-WebSocketClient client = new WebSocketClient(URI.create("wss://irccloud.com"), new WebSocketClient.Handler() {
+
+WebSocketClient.Builder builder = new WebSocketClient.Builder();
+
+builder.addHeader("Cookie", "session=abcd);
+
+builder.endPoint("wss://irccloud.com");
+builder.listener(new WebSocketClient.Listener() {
     @Override
     public void onConnect() {
         Log.d(TAG, "Connected!");
@@ -41,8 +44,10 @@ WebSocketClient client = new WebSocketClient(URI.create("wss://irccloud.com"), n
     @Override
     public void onError(Exception error) {
         Log.e(TAG, "Error!", error);
-    }
-}, extraHeaders);
+});
+
+
+client = builder.build();
 
 client.connect();
 
